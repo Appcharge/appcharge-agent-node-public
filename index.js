@@ -3,9 +3,9 @@ require("dotenv").config();
 
 // Check if required environment variables are defined
 if (
-  process.env.KEY == undefined ||
-  process.env.FACEBOOK_APP_SECRET == undefined ||
-  process.env.APPLE_SECRET_API == undefined
+    process.env.KEY === undefined ||
+    process.env.FACEBOOK_APP_SECRET === undefined ||
+    process.env.APPLE_SECRET_API === undefined
 ) {
   console.error("Missing KEY/FACEBOOK_APP_SECRET/APPLE_SECRET_API environment variable");
   return;
@@ -16,8 +16,10 @@ var express = require("express");
 var bodyParser = require("body-parser");
 const authController = require('./controllers/auth/auth.controller')
 const playerController = require('./controllers/player/player.controller')
-const signer = require('./signer.service').init(process.env.KEY);
-const parseSignature = require('./utils');
+const ordersController = require('./controllers/order/order.controller')
+const analyticsController = require('./controllers/analytics/analytics.controller')
+const offerController = require('./controllers/offer/offer.controller')
+const authMiddleware = require("./middleware/auth.middleware");
 
 // Create Express app instance
 const app = express();
@@ -33,25 +35,23 @@ app.use((error, req, res, next) => {
 
 app.use(express.json());
 
-// Middleware to decrypt request body
-function authMiddleware(req, res, next) {
-  var expectedSignature = parseSignature(req.headers['signature']);
-  var payloadToSign = `${expectedSignature.t}.${JSON.stringify(req.body)}`
-  var sign = signer.signPayload(payloadToSign);
-  if (sign !== expectedSignature.v1) {
-    return res.status(400).json({ error: 'Invalid authorization header' });
-  }
-  next();
-}
-
 
 // Set up routes
-app.use("/auth", authMiddleware)
-app.use("/auth", authController)
+app.use("/mocker/auth", authMiddleware)
+app.use("/mocker/auth", authController)
 
-app.use("/updateBalance", authMiddleware)
-app.use("/updateBalance", playerController)
+app.use("/mocker", authMiddleware)
+app.use("/mocker", playerController)
+
+app.use("/mocker/orders", authMiddleware)
+app.use("/mocker/orders", ordersController)
+
+app.use("/mocker/analytics", authMiddleware)
+app.use("/mocker/analytics", analyticsController)
+
+app.use("/mocker/analytics", authMiddleware)
+app.use("/mocker/offer", offerController)
 
 const PORT = process.env.PORT || 8080;
 // Start the server
-app.listen(PORT, () => console.log(`Appcharge server started on port ${PORT}!`));
+app.listen(PORT, () => console.log(`Webhook server started on port ${PORT}!`));
