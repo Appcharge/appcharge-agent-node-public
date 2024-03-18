@@ -10,7 +10,7 @@ function parseSignature(signatureString) {
   const match = signatureString.match(regex);
 
   if (!match || match.length < 3) {
-    throw new Error('Invalid signature format');
+    throw new Error("Invalid signature format");
   }
 
   const t = match[1];

@@ -28,7 +28,7 @@ const createAuthResponse = (authResult) => {
 router.post("/", async (req, res) => {
   const { error } = AuthenticationRequestSchema.validate(req.body);
   if (error) {
-      return res.status(400).json({ error: error.details[0].message });
+    return res.status(400).json({ error: error.details[0].message });
   }
 
   const authRequest = AuthenticationRequest.fromJson(req.body);
@@ -46,10 +46,7 @@ router.post("/", async (req, res) => {
         );
         break;
       case "google":
-        authResult = await googleLogin(
-          authRequest.appId,
-          authRequest.token
-        );
+        authResult = await googleLogin(authRequest.appId, authRequest.token);
         break;
       case "apple":
         authResult = await appleLogin(
@@ -84,4 +81,3 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
-
