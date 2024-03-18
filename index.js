@@ -1,3 +1,8 @@
+// Load environment variables
+const { checkEnvVariables } = require("./helpers/check-envs");
+require("dotenv").config();
+checkEnvVariables();
+
 // Load required modules
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,11 +12,7 @@ const ordersController = require("./controllers/order/order.controller");
 const analyticsController = require("./controllers/analytics/analytics.controller");
 const offerController = require("./controllers/offer/offer.controller");
 const authMiddleware = require("./middleware/auth.middleware");
-const { checkEnvVariables } = require("./helpers/check-envs");
 
-// Load environment variables
-require("dotenv").config();
-checkEnvVariables();
 const PORT = process.env.PORT || 8080;
 
 // Create Express app instance
