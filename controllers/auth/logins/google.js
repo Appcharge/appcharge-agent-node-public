@@ -21,4 +21,3 @@ const googleLogin = async (appId, token) => {
 };
 
 module.exports = googleLogin;
-

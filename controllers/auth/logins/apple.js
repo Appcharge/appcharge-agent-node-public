@@ -3,17 +3,17 @@ const { LoginResponse } = require("../models");
 
 const appleLogin = async (appId, token, appleSecretApi) => {
   if (!appleSecretApi) {
-    console.log('Apple secret API is not provided.');
+    console.log("Apple secret API is not provided.");
     return new LoginResponse(false, null);
   }
 
-  const url = 'https://appleid.apple.com/auth/token';
+  const url = "https://appleid.apple.com/auth/token";
 
   const requestBody = `client_id=${appId}&client_secret=${appleSecretApi}&code=${token}&grant_type=authorization_code`;
 
   const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: requestBody,
   };
 
@@ -34,13 +34,15 @@ const appleLogin = async (appId, token, appleSecretApi) => {
 };
 
 function extractUserIdFromIdToken(idToken) {
-  const parts = idToken.split('.');
+  const parts = idToken.split(".");
   if (parts.length !== 3) {
     return null; // Invalid ID token format
   }
 
   const encodedPayload = parts[1];
-  const decodedPayload = Buffer.from(encodedPayload, 'base64').toString('utf-8');
+  const decodedPayload = Buffer.from(encodedPayload, "base64").toString(
+    "utf-8"
+  );
   const payloadJson = decodedPayload;
 
   try {
@@ -54,4 +56,3 @@ function extractUserIdFromIdToken(idToken) {
 }
 
 module.exports = appleLogin;
-
