@@ -1,16 +1,17 @@
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
+const router = Router();
+
+module.exports = router;
 
 const secretsService = {
   getFacebookSecret: () => process.env.FACEBOOK_APP_SECRET,
   getAppleSecretApi: () => process.env.APPLE_SECRET_API,
 };
 
-const facebookLogin = require("./logins/facebook");
-const googleLogin = require("./logins/google");
-const appleLogin = require("./logins/apple");
-const { LoginResponse } = require("./models");
-const { AuthenticationRequest } = require("./models");
+const fbController = require("./controllers/facebook");
+const googleController = require("./controllers/google");
+const appleController = require("./controllers/apple");
+const { LoginResponse, AuthenticationRequest } = require("./models");
 const AuthenticationRequestSchema = require("./models.schema");
 
 const createAuthResponse = (authResult) => {
@@ -39,25 +40,26 @@ router.post("/", async (req, res) => {
     const authMethod = authRequest ? authRequest.authMethod : null;
     switch (authMethod) {
       case "facebook":
-        authResult = await facebookLogin(
+        authResult = await fbController(
           authRequest.appId,
           authRequest.token,
           secretsService.getFacebookSecret()
         );
         break;
       case "google":
-        authResult = await googleLogin(authRequest.appId, authRequest.token);
+        authResult = await googleController(
+          authRequest.appId,
+          authRequest.token
+        );
         break;
       case "apple":
-        authResult = await appleLogin(
+        authResult = await appleController(
           authRequest.appId,
           authRequest.token,
           secretsService.getAppleSecretApi()
         );
         break;
       case "userToken":
-        authResult = new LoginResponse(true, authRequest.token);
-        break;
       case "userPassword":
         authResult = new LoginResponse(true, authRequest.token);
         break;
@@ -79,5 +81,3 @@ router.post("/", async (req, res) => {
     return res.status(400).json(null);
   }
 });
-
-module.exports = router;

@@ -1,9 +1,14 @@
-const express = require("express");
-const signer = require("../../signer.service").init(process.env.KEY);
-const orderService = require("./service").init(process.env.REPORTING_API_URL);
-const router = express.Router();
+const { Router } = require("express");
 const GetOrdersRequestSchema = require("./schema");
 const { GetOrdersRequest } = require("./models");
+
+const router = Router();
+
+module.exports = router;
+
+const signer = require("../helpers/signer.service").init(process.env.KEY);
+const orderService = require("./service").init(process.env.REPORTING_API_URL);
+
 const secretsService = {
   reportingApiUrl: () => process.env.REPORTING_API_URL,
   key: () => process.env.KEY,
@@ -29,5 +34,3 @@ router.post("/", async (req, res) => {
   );
   return res.json(getOrdersResponse);
 });
-
-module.exports = router;

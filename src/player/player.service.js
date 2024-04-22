@@ -4,23 +4,19 @@ const path = require("path");
 
 class PlayerService {
   constructor(apiUrl) {
-    this.playerDataSetPath = path.resolve(
-      path.resolve(__dirname, "../.."),
-      process.env.PLAYER_DATASET_FILE_PATH
-    );
+    // Example file
+    this.playerDataSetPath = path.resolve("./player-dataset.json");
     this.awardPublisherUrl = apiUrl;
   }
 
-  async infoSync() {
+  async getInfoSyncData() {
     const playerInfoDataset = JSON.parse(
       fs.readFileSync(this.playerDataSetPath, { encoding: "utf-8" })
     );
-    console.log(playerInfoDataset);
-    return playerInfoDataset["player"];
+    return playerInfoDataset;
   }
 
   async updateBalance(signature, requestBody) {
-    console.log(requestBody);
     const response = await axios.post(this.awardPublisherUrl, requestBody, {
       headers: {
         signature: signature,
@@ -30,8 +26,8 @@ class PlayerService {
     return response.data;
   }
 
-  static init() {
-    return new PlayerService();
+  static init(apiUrl) {
+    return new PlayerService(apiUrl);
   }
 }
 

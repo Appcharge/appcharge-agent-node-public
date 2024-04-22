@@ -1,5 +1,5 @@
 const axios = require("axios");
-const LoginResponse = require("../models").LoginResponse;
+const { LoginResponse } = require("../models");
 
 async function facebookLogin(appSecret, appId, token) {
   const response = await axios.get(

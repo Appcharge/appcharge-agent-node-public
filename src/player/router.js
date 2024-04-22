@@ -1,15 +1,16 @@
-const express = require("express");
+const { Router } = require("express");
+const router = Router();
+
+module.exports = router;
 
 const { UpdateBalanceRequest } = require("./models");
-const playerService = require("./service").init(
+const playerService = require("./player.service").init(
   process.env.AWARD_PUBLISHER_URL
 );
-const signer = require("../../signer.service").init(process.env.KEY);
+const signer = require("../helpers/signer.service").init(process.env.SIGN_KEY);
 const secretsService = {
-  key: () => process.env.KEY,
+  key: () => process.env.SIGN_KEY,
 };
-
-const router = express.Router();
 
 router.get("/playerInfoSync", async (req, res) => {
   const playerInfoSyncData = await playerService.infoSync();
@@ -28,5 +29,3 @@ router.post("/playerUpdateBalance", async (req, res) => {
   );
   return res.json(playerUpdateBalanceData);
 });
-
-module.exports = router;

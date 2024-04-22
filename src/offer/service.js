@@ -5,15 +5,8 @@ const path = require("path");
 class OfferService {
   constructor(apiUrl) {
     this.offerUrl = `${apiUrl}/offering/offer/`;
-    this.offersFilePath = path.resolve(
-      path.resolve(__dirname, "../.."),
-      process.env.OFFERS_FILE_PATH
-    );
-    this.playerDatasetFilePath = path.resolve(
-      path.resolve(__dirname, "../.."),
-      process.env.PLAYER_DATASET_FILE_PATH
-    );
-    this.signatureService = require("../../signer.service").init(
+    this.offersFilePath = path.resolve("./offers.example.json");
+    this.signatureService = require("../helpers/signer.service").init(
       process.env.KEY
     );
   }
@@ -85,10 +78,7 @@ class OfferService {
 
   async updateOfferId() {
     const offerDataset = JSON.parse(
-      fs.readFileSync(
-        path.resolve(path.resolve(__dirname, "../.."), this.offersFilePath),
-        { encoding: "utf-8" }
-      )
+      fs.readFileSync(this.offersFilePath, { encoding: "utf-8" })
     );
     const originalOfferId = offerDataset["create"]["publisherOfferId"];
     offerDataset["create"]["publisherOfferId"] = originalOfferId + "1";

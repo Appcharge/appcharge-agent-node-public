@@ -10,4 +10,4 @@ class GetOrdersRequest {
   }
 }
 
-module.exports.GetOrdersRequest = GetOrdersRequest;
+exports.GetOrdersRequest = GetOrdersRequest;

@@ -48,6 +48,6 @@ class LoginResponse {
   }
 }
 
-module.exports.AuthResponse = AuthResponse;
-module.exports.LoginResponse = LoginResponse;
-module.exports.AuthenticationRequest = AuthenticationRequest;
+exports.AuthResponse = AuthResponse;
+exports.LoginResponse = LoginResponse;
+exports.AuthenticationRequest = AuthenticationRequest;

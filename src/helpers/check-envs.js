@@ -1,5 +1,4 @@
 exports.checkEnvVariables = () => {
-  // Check if required environment variables are defined
   if (!process.env.SIGN_KEY) {
     throw new Error("Missing SIGN_KEY environment variable");
   }

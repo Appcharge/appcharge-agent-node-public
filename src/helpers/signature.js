@@ -4,8 +4,9 @@ class Signature {
     this.v1 = v1;
   }
 }
+exports.Signature = Signature;
 
-function parseSignature(signatureString) {
+exports.parseSignature = (signatureString) => {
   const regex = /t=(.*),v1=(.*)/;
   const match = signatureString.match(regex);
 
@@ -17,6 +18,4 @@ function parseSignature(signatureString) {
   const v1 = match[2];
 
   return new Signature(t, v1);
-}
-
-module.exports = parseSignature;
+};
