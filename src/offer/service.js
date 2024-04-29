@@ -5,7 +5,7 @@ const path = require("path");
 class OfferService {
   constructor(apiUrl) {
     this.offerUrl = `${apiUrl}/offering/offer/`;
-    this.offersFilePath = path.resolve("./offers.example.json");
+    this.offersFilePath = path.resolve("./offer-bundle.example.json");
     this.signatureService = require("../helpers/signer.service").init(
       process.env.KEY
     );
@@ -38,7 +38,7 @@ class OfferService {
     }
   }
 
-  async updateOffer(publisherToken) {
+  async updateOffer() {
     try {
       const updateOfferDataset = JSON.parse(
         fs.readFileSync(this.offersFilePath, { encoding: "utf-8" })

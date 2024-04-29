@@ -1,8 +1,8 @@
 {
   "create": {
-    "publisherOfferId": "Offer_Bundle_2434343243221111",
-    "name": "BEST SPECIAL OFFER EVER EVER TEST TEST TEST TEST",
-    "type": "Bundle",
+    "publisherOfferId": "Offer_Popup",
+    "name": "best PopUp",
+    "type": "PopUp",
     "intervals": [
       {
         "startDate": "2023-02-15T15:38:04.095Z",
@@ -22,9 +22,13 @@
         "playerAvailability": 6
       }
     ],
-    "createdBy": "API",
     "dynamicOfferUi": {
-      "badges": []
+      "salePercentage": 25,
+      "badges": [
+        {
+          "publisherBadgeId": "Your_badge_id"
+        }
+      ]
     }
   },
   "update": {
@@ -48,7 +52,6 @@
         "priceInUsdCents": 3000,
         "playerAvailability": 10
       }
-    ],
-    "createdBy": "API"
+    ]
   }
 }
