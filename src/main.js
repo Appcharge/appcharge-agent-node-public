@@ -21,13 +21,7 @@ module.exports = async () => {
   // Set up middlewares
   app.use(bodyParser.text());
   app.use(express.json());
-  app.use(authMiddleware(signService));
-
-  // Middleware to handle errors
-  app.use((error, req, res, next) => {
-    console.error("Error: ", error);
-    res.status(400).send("Bad Request");
-  });
+  // app.use(authMiddleware(signService));
 
   // Set up routes
   app.use("/mocker/auth", authRouter);
@@ -35,6 +29,12 @@ module.exports = async () => {
   app.use("/mocker/orders", orderRouter);
   app.use("/mocker/offers", offerRouter);
   app.use("/mocker/analytics", analyticRouter);
+
+  // Middleware to handle errors
+  app.use((error, req, res, next) => {
+    console.error("Error: ", error);
+    res.status(400).send("Bad Request");
+  });
 
   // Start the server
   app.listen(PORT, () =>

@@ -7,8 +7,10 @@ const AuthenticationRequestSchema = Joi.object({
   token: Joi.string().required(),
   date: Joi.date().iso().required(),
   appId: Joi.string().required(),
-  userName: Joi.string().optional(),
-  password: Joi.string().optional(),
+  userName: [Joi.string().optional(), Joi.allow(null)],
+  password: [Joi.string().optional(), Joi.allow(null)],
+  publisherToken: [Joi.string().optional(), Joi.allow(null)],
+  sessionId: [Joi.string().optional(), Joi.allow(null)],
 });
 
 module.exports = AuthenticationRequestSchema;
