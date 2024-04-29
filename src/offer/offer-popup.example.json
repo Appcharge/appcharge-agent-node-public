@@ -3,6 +3,7 @@
     "publisherOfferId": "Offer_Popup",
     "name": "best PopUp",
     "type": "PopUp",
+    "subType": "DailyBonus",
     "intervals": [
       {
         "startDate": "2023-02-15T15:38:04.095Z",
@@ -11,6 +12,17 @@
     ],
     "offerUiId": "64a4082271335b2498c1ea0d",
     "active": true,
+    "playerAvailability": 2,
+    "showAfter": "login",
+    "triggers": [
+      {
+        "type": "time",
+        "eventName": "impression",
+        "every": 1440
+      }
+    ],
+    "priority": 1,
+    "startOver": true,
     "segments": [
       "Segment_4"
     ],
@@ -24,11 +36,7 @@
     ],
     "dynamicOfferUi": {
       "salePercentage": 25,
-      "badges": [
-        {
-          "publisherBadgeId": "Your_badge_id"
-        }
-      ]
+      "badges": []
     }
   },
   "update": {
