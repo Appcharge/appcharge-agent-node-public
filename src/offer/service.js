@@ -2,6 +2,13 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
+function getDataFromFile(path) {
+  const dataString = fs.readFileSync(path, {
+    encoding: "utf-8",
+  });
+  return JSON.parse(dataString);
+}
+
 class OfferService {
   constructor(apiUrl) {
     this.offerUrl = `${apiUrl}/offering/offer/`;
@@ -13,19 +20,12 @@ class OfferService {
 
   async createOffer() {
     try {
-      const offerDataset = JSON.parse(
-        fs.readFileSync(this.offersFilePath, { encoding: "utf-8" })
-      );
-      const response = await axios.post(this.offerUrl, offerDataset["create"], {
-        headers: {
-          "x-publisher-token": process.env.PUBLISHER_TOKEN,
-          signature: this.signatureService.createSignature(
-            offerDataset["create"]
-          ),
-        },
-      });
+      const offerDataset = getDataFromFile(this.offersFilePath);
+      const createDataset = offerDataset["create"];
+      const response = await axios.post(this.offerUrl, createDataset);
       const responseBody = response.data;
-      await this.updateOfferId();
+
+      await this.updateOfferIdInFile();
 
       return responseBody;
     } catch (error) {
@@ -40,27 +40,18 @@ class OfferService {
 
   async updateOffer() {
     try {
-      const updateOfferDataset = JSON.parse(
-        fs.readFileSync(this.offersFilePath, { encoding: "utf-8" })
-      )["update"];
+      const offerDataset = getDataFromFile(this.offersFilePath);
+      const updateOfferDataset = offerDataset["update"];
       const offerId = updateOfferDataset["publisherOfferId"];
+
       const modifiedOfferDataset = this.removeFields(updateOfferDataset, [
         "publisherOfferId",
         "createdBy",
         "intervals",
       ]);
-      const response = await axios.put(
-        this.offerUrl + offerId,
-        modifiedOfferDataset,
-        {
-          headers: {
-            "x-publisher-token": process.env.PUBLISHER_TOKEN,
-            signature:
-              this.signatureService.createSignature(modifiedOfferDataset),
-          },
-        }
-      );
+      const path = this.offerUrl + offerId;
 
+      const response = await axios.put(path, modifiedOfferDataset);
       const responseBody = response.data;
 
       return { body: responseBody, status: response.status };
@@ -76,12 +67,10 @@ class OfferService {
     return modifiedJsonNode;
   }
 
-  async updateOfferId() {
-    const offerDataset = JSON.parse(
-      fs.readFileSync(this.offersFilePath, { encoding: "utf-8" })
-    );
-    const originalOfferId = offerDataset["create"]["publisherOfferId"];
-    offerDataset["create"]["publisherOfferId"] = originalOfferId + "1";
+  async updateOfferIdInFile() {
+    const offerDataset = getDataFromFile(this.offersFilePath);
+    const dataToUse = offerDataset["create"];
+    dataToUse["publisherOfferId"] = dataToUse["publisherOfferId"] + "1";
     fs.writeFileSync(
       this.offersFilePath,
       JSON.stringify(offerDataset, null, 2)
