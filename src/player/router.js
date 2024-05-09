@@ -1,8 +1,6 @@
 const { Router } = require("express");
 const router = Router();
 
-module.exports = router;
-
 const { UpdateBalanceRequest } = require("./models");
 const playerService = require("./player.service").init(
   process.env.AWARD_PUBLISHER_URL
@@ -29,3 +27,5 @@ router.post("/playerUpdateBalance", async (req, res) => {
   );
   return res.json(playerUpdateBalanceData);
 });
+
+module.exports = router;

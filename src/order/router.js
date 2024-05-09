@@ -4,8 +4,6 @@ const { GetOrdersRequest } = require("./models");
 
 const router = Router();
 
-module.exports = router;
-
 const signer = require("../helpers/signer.service").init(process.env.KEY);
 const orderService = require("./service").init(process.env.REPORTING_API_URL);
 
@@ -34,3 +32,5 @@ router.post("/", async (req, res) => {
   );
   return res.json(getOrdersResponse);
 });
+
+module.exports = router;

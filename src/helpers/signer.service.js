@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 
-module.exports = class SignatureHashingService {
+class SignatureHashingService {
   constructor(key) {
     this.key = key;
   }
@@ -24,4 +24,6 @@ module.exports = class SignatureHashingService {
   static init(key) {
     return new SignatureHashingService(key);
   }
-};
+}
+exports.SignatureHashingService = SignatureHashingService;
+module.exports = () => new SignatureHashingService(process.env.SIGN_KEY);

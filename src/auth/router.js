@@ -1,7 +1,9 @@
 const { Router } = require("express");
+const authMiddleware = require("../middlewares/auth.middleware");
+
 const router = Router();
 
-module.exports = router;
+router.use(authMiddleware(signService));
 
 const secretsService = {
   getFacebookSecret: () => process.env.FACEBOOK_APP_SECRET,
@@ -81,3 +83,5 @@ router.post("/", async (req, res) => {
     return res.status(400).json(null);
   }
 });
+
+module.exports = router;

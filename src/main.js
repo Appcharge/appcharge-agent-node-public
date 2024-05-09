@@ -1,8 +1,6 @@
 // Load required modules
 const express = require("express");
 const bodyParser = require("body-parser");
-const { authMiddleware } = require("./middlewares");
-const { SignatureHashingService } = require("./helpers");
 
 const { router: authRouter } = require("./auth");
 const { router: playerRouter } = require("./player");
@@ -13,15 +11,12 @@ const { router: analyticRouter } = require("./analytics");
 const PORT = process.env.PORT || 8080;
 
 module.exports = async () => {
-  const signService = new SignatureHashingService(process.env.SIGN_KEY);
-
   // Create Express app instance
   const app = express();
 
   // Set up middlewares
   app.use(bodyParser.text());
   app.use(express.json());
-  // app.use(authMiddleware(signService));
 
   // Set up routes
   app.use("/mocker/auth", authRouter);
