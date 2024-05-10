@@ -48,5 +48,8 @@
         "playerAvailability": 10
       }
     ]
+  },
+  "delete": {
+    "publisherOfferId": "Offer_Bundle"
   }
 }

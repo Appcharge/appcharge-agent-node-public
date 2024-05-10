@@ -3,7 +3,8 @@ const { Router } = require("express");
 const router = Router();
 
 const offerService = require("./service").init(
-  process.env.ASSET_UPLOAD_GATEWAY_URL
+  process.env.APPCHARGE_API_URL,
+  process.env.PUBLISHER_TOKEN
 );
 
 router.post("/", async (req, res) => {
@@ -14,6 +15,11 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
   const updateOfferResponse = await offerService.updateOffer();
   return res.json(updateOfferResponse);
+});
+
+router.delete("/", async (req, res) => {
+  const deleteOfferResponse = await offerService.deleteOffer();
+  return res.json(deleteOfferResponse);
 });
 
 module.exports = router;

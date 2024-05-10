@@ -116,8 +116,12 @@
             "quantity": 13
         }
     ],
-    "segments": [],
+    "segments": [
+        "some",
+        "segments",
+        "here"
+    ],
     "focus": {
-        "publisherBundleId": null
+        "publisherBundleId": "promotion_offer_SKU"
     }
 }

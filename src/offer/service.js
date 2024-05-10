@@ -10,12 +10,12 @@ function getDataFromFile(path) {
 }
 
 class OfferService {
-  constructor(apiUrl) {
+  constructor(apiUrl, publisherToken) {
     this.offerUrl = `${apiUrl}/offering/offer/`;
     this.offersFilePath = path.resolve("./offer-bundle.example.json");
-    this.signatureService = require("../helpers/signer.service").init(
-      process.env.KEY
-    );
+    this.headers = {
+      "x-publisher-token": publisherToken,
+    };
   }
 
   async createOffer() {
@@ -52,6 +52,23 @@ class OfferService {
       const path = this.offerUrl + offerId;
 
       const response = await axios.put(path, modifiedOfferDataset);
+      const responseBody = response.data;
+
+      return { body: responseBody, status: response.status };
+    } catch (error) {
+      console.error(error);
+      return { error: "Internal Server Error" };
+    }
+  }
+
+  async deleteOffer() {
+    try {
+      const offerDataset = getDataFromFile(this.offersFilePath);
+      const deleteOfferDataset = offerDataset["delete"];
+      const offerId = deleteOfferDataset["publisherOfferId"];
+      const path = this.offerUrl + offerId;
+
+      const response = await axios.delete(path, { headers: this.headers });
       const responseBody = response.data;
 
       return { body: responseBody, status: response.status };
