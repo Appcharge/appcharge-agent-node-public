@@ -31,4 +31,5 @@ class PlayerService {
   }
 }
 
-module.exports = PlayerService;
+exports.PlayerService = PlayerService;
+module.exports = () => new PlayerService(process.env.AWARD_PUBLISHER_URL);

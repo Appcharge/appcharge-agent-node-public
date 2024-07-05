@@ -4,10 +4,8 @@ const router = Router();
 const exampleData = require("./example-data/offers-and-segments-dataset.json");
 
 const { UpdateBalanceRequest } = require("./models");
-const playerService = require("./player.service").init(
-  process.env.AWARD_PUBLISHER_URL
-);
-const signer = require("../helpers/signer.service").init(process.env.SIGN_KEY);
+const playerService = require("./player.service");
+const signer = require("../helpers/signer.service");
 const secretsService = {
   key: () => process.env.SIGN_KEY,
 };
@@ -28,6 +26,10 @@ router.get("/playerInfoSync", async (req, res) => {
   return res.json(exampleData);
 });
 
+// This request will be made by Appcharge
+// Reason: to update the player's balance
+// Request will include sessionMetadata and playerId to identify the player
+// After this one the playerInfoSync will be called to fetch new data
 router.post("/playerUpdateBalance", async (req, res) => {
   const updateBalanceRequest = UpdateBalanceRequest.fromJson(req.body);
   const signature = signer.createSignature(

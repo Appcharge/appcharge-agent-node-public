@@ -20,8 +20,11 @@ class OfferService {
 
   async createOffer() {
     try {
+      // Get data set from file
       const offerDataset = getDataFromFile(this.offersFilePath);
       const createDataset = offerDataset["create"];
+
+      // send the
       const response = await axios.post(this.offerUrl, createDataset);
       const responseBody = response.data;
 
@@ -78,6 +81,26 @@ class OfferService {
     }
   }
 
+  async getOffers() {
+    try {
+      const path = this.offerUrl + "get-offers";
+      const parameters = {
+        offerType: "Bundle",
+        recordLimit: 10,
+        offset: 0,
+      };
+      const response = await axios.post(path, parameters, {
+        headers: this.headers,
+      });
+      const responseBody = response.data;
+
+      return { body: responseBody, status: response.status };
+    } catch (error) {
+      console.error(error);
+      return { error: "Internal Server Error" };
+    }
+  }
+
   removeFields(jsonNode, fieldNames) {
     const modifiedJsonNode = { ...jsonNode };
     fieldNames.forEach((fieldName) => delete modifiedJsonNode[fieldName]);
@@ -99,4 +122,6 @@ class OfferService {
   }
 }
 
-module.exports = OfferService;
+exports.OfferService = OfferService;
+module.exports = () =>
+  new OfferService(process.env.APPCHARGE_API_URL, process.env.PUBLISHER_TOKEN);

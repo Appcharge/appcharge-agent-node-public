@@ -5,10 +5,8 @@ const { AnalyticsRequest } = require("./models");
 
 const router = Router();
 
-const signer = require("../helpers/signer.service").init(process.env.KEY);
-const analyticsService = require("./service").init(
-  process.env.REPORTING_API_URL
-);
+const signer = require("../helpers/signer.service");
+const analyticsService = require("./service");
 const secretsService = {
   reportingApiUrl: () => process.env.REPORTING_API_URL,
   key: () => process.env.KEY,
